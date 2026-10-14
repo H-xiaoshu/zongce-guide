@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>综测学分攻略 · 南昌航空大学科技学院</title>
+<meta name="description" content="南昌航空大学科技学院 综合素质测评 + 第二课堂学分 完全攻略与计算器">
+<meta name="theme-color" content="#04070F">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A1628'/><text y='.92em' x='50' font-size='64' text-anchor='middle' fill='%234FD1FF'>综</text></svg>">
+</head>
+<body>
+
+<!-- 科幻背景层 -->
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="bg-veil" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-scan" aria-hidden="true"></div>
+
+<!-- 顶部阅读进度条 -->
+<div class="readbar" id="readbar" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="seal">攻略</span>
+      <div class="brand-txt">
+        <strong>综测 · 学分 攻略站</strong>
+        <small>南昌航空大学科技学院</small>
+      </div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ============ 首页 ============ -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div class="hero-kicker">STUDENT ASSESSMENT GUIDE</div>
+      <h1 class="hero-title">综测与学分<br><em>完全攻略</em></h1>
+      <p class="hero-sub">
+        依据《南昌航空大学科技学院学生手册（第二十一版·2025）》逐条整理，
+        把 <b>综测怎么算</b>、<b>每个职位加多少分</b>、<b>第二课堂学分怎么攒</b> 一次讲透。
+      </p>
+      <div class="hero-stats" id="heroStats"></div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#calc">开始算综测</a>
+        <a class="btn btn-ghost" href="#depart">查职位分值</a>
+        <a class="btn btn-ghost" href="#credit">算第二课堂</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 核心结论 ============ -->
+  <section class="sec" id="keys">
+    <div class="sec-head">
+      <h2><i></i>先记住这 6 条</h2>
+      <p>剩下的都是细节，但这几条决定了你四年的走向。</p>
+    </div>
+    <div class="key-grid" id="keyGrid"></div>
+  </section>
+
+  <!-- ============ 综测计算器 ============ -->
+  <section class="sec" id="calc">
+    <div class="sec-head">
+      <h2><i></i>综测分计算器</h2>
+      <p>勾选你的实际情况，实时算出综合素质测评总分。分值全部来自手册原文。</p>
+    </div>
+    <div class="calc-wrap">
+      <div class="calc-panel" id="calcPanel"></div>
+      <aside class="calc-side">
+        <div class="score-card">
+          <div class="score-label">综合素质测评总分</div>
+          <div class="score-num" id="scoreNum">0.00</div>
+          <div class="score-max">满分 100.00</div>
+          <div class="score-bars" id="scoreBars"></div>
+          <div class="score-note" id="scoreNote"></div>
+        </div>
+        <div class="mini-card">
+          <h4>换算公式</h4>
+          <code class="formula">总分 = 思想道德×15%<br>　　 + 专业文化×60%<br>　　 + 实践创新×15%<br>　　 + 身体心理×10%</code>
+        </div>
+        <button class="btn btn-primary w100" id="copyScore">复制测算结果</button>
+        <button class="btn btn-ghost w100" id="calcReset">清空重填</button>
+        <div class="kbd-tip">快捷键：按 <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> 快速跳转到四个板块</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 综测构成 ============ -->
+  <section class="sec" id="weights">
+    <div class="sec-head">
+      <h2><i></i>综测总分构成</h2>
+      <p>四块加权，专业文化素质独占 60%，是绝对大头。</p>
+    </div>
+    <div class="weight-grid" id="weightGrid"></div>
+  </section>
+
+  <!-- ============ 思想道德 ============ -->
+  <section class="sec" id="moral">
+    <div class="sec-head">
+      <h2><i></i>一、思想道德素质 <span class="pct-tag red">15%</span></h2>
+      <p>满分 100 = 基础分 70 + 奖励分 30 − 扣分。奖励分封顶 30 分。</p>
+    </div>
+    <div id="moralBody"></div>
+  </section>
+
+  <!-- ============ 专业文化 ============ -->
+  <section class="sec" id="academic">
+    <div class="sec-head">
+      <h2><i></i>二、专业文化素质 <span class="pct-tag blue">60%</span></h2>
+      <p>这一项就是你的加权平均分，权重最高，也是唯一没有"捷径"的一块。</p>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3>计算公式</h3>
+        <code class="formula block">总平均学分值 ＝<br>Σ（每门课程考核成绩 × 每门课程学分）<br>÷ Σ 每门课程学分</code>
+        <ul class="dot" id="academicNotes"></ul>
+      </div>
+      <div class="card accent">
+        <h3>为什么它最重要</h3>
+        <p>综测总分里它占 <b class="hl">60%</b>。也就是说：</p>
+        <div class="cmp">
+          <div class="cmp-row"><span>专业分提高 10 分</span><b class="up">总分 +6.0</b></div>
+          <div class="cmp-row"><span>思想道德提高 10 分</span><b>总分 +1.5</b></div>
+          <div class="cmp-row"><span>实践创新提高 10 分</span><b>总分 +1.5</b></div>
+          <div class="cmp-row"><span>身体心理提高 10 分</span><b>总分 +1.0</b></div>
+        </div>
+        <p class="muted">而且思想道德、实践创新的奖励分都有 30 / 60 分的上限，专业分没有上限。
+        结论：<b>把成绩做上去，性价比永远最高。</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 实践创新 ============ -->
+  <section class="sec" id="practice">
+    <div class="sec-head">
+      <h2><i></i>三、实践创新素质 <span class="pct-tag teal">15%</span></h2>
+      <p>满分 100 = 基础分 40 + 奖励分 60。这是加分项目最多、最能拉开差距的一块。</p>
+    </div>
+    <div id="practiceBody"></div>
+  </section>
+
+  <!-- ============ 身体心理 ============ -->
+  <section class="sec" id="body">
+    <div class="sec-head">
+      <h2><i></i>四、身体心理素质 <span class="pct-tag gold">10%</span></h2>
+      <p>满分 100 = 基础分 75 + 奖励分 25 − 扣分。占比最小，但扣分很疼。</p>
+    </div>
+    <div id="bodyBody"></div>
+  </section>
+
+  <!-- ============ 部门职位总表 ============ -->
+  <section class="sec" id="depart">
+    <div class="sec-head">
+      <h2><i></i>部门 · 职位 加分总表</h2>
+      <p>同一个职位在两套体系里分值完全不同：<b class="hl">思想道德</b>那套最高 10 分，
+        <b class="hl">第二课堂</b>那套最高 3 学分。下面两张表分开看，别混。</p>
+    </div>
+
+    <div class="card">
+      <h3>表 A · 学生干部在「思想道德素质」中的加分（满分 30 奖励分里最多占 10 分）</h3>
+      <div class="tbl-wrap"><table class="tbl" id="cadreMoralTbl"></table></div>
+      <p class="muted">依据：手册第五条（三）3「担任学生干部最高加 10 分」，共 8 档。
+        <b>就高不累加</b>——身兼多职按最高职务算。</p>
+    </div>
+
+    <div class="card">
+      <h3>表 B · 学生干部在「第二课堂学分」中的计分（表 3）</h3>
+      <div class="tbl-wrap"><table class="tbl" id="cadreCreditTbl"></table></div>
+      <p class="muted">依据：第二课堂学分管理办法第八条表 3。考核合格凭聘书和证书计分；
+        <b>考核优秀的在基础分值上加 1 分</b>；本项<b>就高不累加</b>。</p>
+    </div>
+
+    <div class="card">
+      <h3>表 C · 按部门 / 职位一览</h3>
+      <p class="muted">把"部门"和"两套分值"合并到一张表，方便直接对号入座。
+        表中所列为<b>考核合格</b>时的分值，考核优秀通常再高一档。</p>
+      <div id="departList"></div>
+    </div>
+
+    <div class="card">
+      <h3>表 D · 学生干部考核评分表（满分 100）</h3>
+      <p class="muted">考核结果直接决定你拿哪一档加分。等级：<b>优秀 ≥90</b>、<b>称职 ≥70</b>、<b>不称职 ≤69</b>。</p>
+      <div class="tbl-wrap"><table class="tbl assess" id="assessTbl"></table></div>
+      <div class="callout warn" id="assessNote"></div>
+      <div class="assess-meta" id="assessMeta"></div>
+    </div>
+  </section>
+
+  <!-- ============ 第二课堂学分 ============ -->
+  <section class="sec" id="credit">
+    <div class="sec-head">
+      <h2><i></i>第二课堂学分</h2>
+      <p>这是独立于课程学分的<b class="hl">毕业硬门槛</b>：必须修满 <b class="hl">4 学分</b>，否则不能毕业。</p>
+    </div>
+
+    <div class="credit-top" id="creditTop"></div>
+
+    <div class="calc-wrap">
+      <div class="calc-panel" id="creditPanel"></div>
+      <aside class="calc-side">
+        <div class="score-card teal">
+          <div class="score-label">已获第二课堂学分</div>
+          <div class="score-num" id="creditNum">0.0</div>
+          <div class="score-max" id="creditGrade">未达标</div>
+          <div class="progress"><div class="progress-bar" id="creditBar"></div></div>
+          <div class="score-note" id="creditNote"></div>
+        </div>
+        <div class="mini-card">
+          <h4>达标线</h4>
+          <ul class="mini-list" id="creditGradeList"></ul>
+        </div>
+        <button class="btn btn-primary w100" id="copyCredit">复制学分结果</button>
+        <button class="btn btn-ghost w100" id="creditReset">清空重填</button>
+      </aside>
+    </div>
+
+    <div class="card">
+      <h3>六大类计分明细</h3>
+      <div id="creditCats"></div>
+    </div>
+  </section>
+
+  <!-- ============ 奖学金 ============ -->
+  <section class="sec" id="award">
+    <div class="sec-head">
+      <h2><i></i>奖学金与评优</h2>
+      <p>综测排名直接决定这些钱和荣誉。一、二、三等奖学金按素质测评总成绩择优评定。</p>
+    </div>
+    <div id="awardBody"></div>
+  </section>
+
+  <!-- ============ 红线 ============ -->
+  <section class="sec" id="redline">
+    <div class="sec-head">
+      <h2><i></i>学分红线与学位</h2>
+      <p>这些是"不能碰"的规则，比加分更重要。</p>
+    </div>
+    <div id="redlineBody"></div>
+  </section>
+
+  <!-- ============ 避坑 ============ -->
+  <section class="sec" id="pit">
+    <div class="sec-head">
+      <h2><i></i>最容易踩的 8 个坑</h2>
+      <p>都是手册里白纸黑字写着、但很多人到毕业才发现的事。</p>
+    </div>
+    <div class="pit-grid" id="pitGrid"></div>
+  </section>
+
+  <!-- ============ 行动清单 ============ -->
+  <section class="sec" id="plan">
+    <div class="sec-head">
+      <h2><i></i>四年行动清单</h2>
+      <p>把上面的规则翻译成"什么时候该做什么"。</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- ============ 来源 ============ -->
+  <section class="sec" id="src">
+    <div class="sec-head">
+      <h2><i></i>资料来源与免责</h2>
+    </div>
+    <div class="card">
+      <ul class="dot" id="srcList"></ul>
+      <div class="callout warn">
+        本站内容逐条摘录自学院官网公开文件，并标注了条款出处。政策可能随学年修订，
+        实际执行请以学院最新发布文件和辅导员通知为准。本站仅作资料整理，不构成官方解释。
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div>综测 · 学分攻略站 · 数据来源：南昌航空大学科技学院学生手册（第二十一版·2025）</div>
+  <div class="muted">本页为局域网内部学习资料，仅供参考</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
