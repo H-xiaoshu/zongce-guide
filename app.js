@@ -17,7 +17,7 @@
     ['keys', '核心结论'], ['calc', '综测计算器'], ['weights', '总分构成'],
     ['moral', '思想道德'], ['academic', '专业文化'], ['practice', '实践创新'],
     ['body', '身体心理'], ['depart', '职位总表'], ['credit', '第二课堂'],
-    ['award', '奖学金'], ['redline', '红线'], ['pit', '避坑'], ['plan', '行动清单']
+    ['award', '奖学金'], ['changes', '22版更新'], ['redline', '红线'], ['pit', '避坑'], ['plan', '行动清单']
   ];
 
   function buildNav() {
@@ -131,7 +131,7 @@
     const stats = [
       ['60%', '专业成绩权重'],
       ['4 分', '第二课堂毕业线'],
-      ['30 分', '思想道德奖励上限'],
+      ['40 分', '思想道德奖励上限'],
       ['60 分', '实践创新奖励上限'],
       ['10 分', '学生干部最高加分'],
       ['100 分', '综测满分']
@@ -144,7 +144,7 @@
     { h: '专业成绩占 60%，是绝对大头', p: '综测 = 思想道德×15% + <b>专业文化×60%</b> + 实践创新×15% + 身体心理×10%。专业分就是你的加权平均分，没有上限，其它三块都有奖励分封顶。', tag: '成绩优先' },
     { h: '第二课堂学分是独立毕业门槛', p: '它和课程学分是两套体系。必须修满 <b>4 学分</b>才能毕业，低于 4 分记「不合格」，<b>不可毕业</b>——即使所有课程都及格。', tag: '硬门槛' },
     { h: '很多荣誉其实不加分', p: '十佳大学生、优秀学生干部、国家奖助学金、优秀青年志愿者……这些<b>一律不加分</b>。因为它们是"以综测成绩为依据"产生的，不能再倒回来加分。', tag: '别误会' },
-    { h: '学生干部有两套分值，别混', p: '在<b>思想道德</b>里最高加 <b>10 分</b>（8 档）；在<b>第二课堂</b>里最高只计 <b>3 学分</b>（表 3）。两套体系独立计算，各算各的。', tag: '两套体系' },
+    { h: '学生干部有两套分值，别混', p: '在<b>思想道德</b>里最高加 <b>10 分</b>（22 版由 8 档改为 <b>9 档</b>）；在<b>第二课堂</b>里最高只计 <b>3 学分</b>（表 3）。两套体系独立计算，各算各的。', tag: '两套体系' },
     { h: '加分必须自己申报，过期不补', p: '证书加分写明「当时不申报加分的以后不再享受」。每学年初测评时，把证书、获奖证明、聘书原件准备好交给班级测评小组。', tag: '主动申报' },
     { h: '考试舞弊 = 拿不到学位证', p: '因考试舞弊受记过及以上处分，<b>不能授予学士学位</b>。这是四年里最不能碰的一条线。', tag: '绝对红线' }
   ];
@@ -173,7 +173,7 @@
   function renderMoral() {
     const m = P.moral;
     const baseRows = m.base.items.map(i => [i.t, i.v]);
-    const cadreRows = P.cadreMoral.map(c => [
+    const cadreRows = P.cadreMoral.rows.map(c => [
       c.role, c.assess, `<span class="num ${c.lv >= 10 ? 'hi' : (c.lv === 0 ? 'zero' : '')}">${c.lv}</span>`
     ]);
     // 干部表自定义渲染（含考核列）
@@ -184,13 +184,13 @@
 
     $('#moralBody').innerHTML = `
       <div class="card reveal">
-        <h3>基础分（满分 70 分）</h3>
-        <p class="muted">达到下述要求者即可计 70 分；没有达标的由各班综测小组根据实际情况酌情扣分。</p>
+        <h3>基础分（满分 ${m.base.total} 分）</h3>
+        <p class="muted">达到下述要求者即可计 ${m.base.total} 分；没有达标的由各班综测小组根据实际情况酌情扣分。<b>22 版由 70 分降为 60 分。</b></p>
         ${table(['评定标准', '分值'], baseRows)}
       </div>
 
       <div class="card reveal">
-        <h3>奖励分（满分 30 分）</h3>
+        <h3>奖励分（满分 ${m.bonusCap} 分）</h3>
         <h4>① 向党组织靠拢</h4>
         ${table(['情形', '加分'], [
           ['递交入党申请书且按时提交思想汇报', 5],
@@ -202,12 +202,13 @@
         <h4 style="margin-top:20px">② 见义勇为、助人为乐</h4>
         ${table(['级别', '院级', '校级', '省级', '国家级'], [['加分上限', 2, 5, 10, 15]])}
         <p class="muted">需有相关政府部门的通报表扬或县级以上报刊宣传报道。
-          紧急情况下为救死扶伤而义务献血（稀有血型、捐献骨髓）并受表彰的可参照酌情加分；
-          <b>普通献血证不加分</b>。</p>
+          紧急情况下挺身而出，为救死扶伤而义务捐献（如稀有血型、捐献骨髓）行为，<b>加 10 分</b>；
+          当学年献血证<b>第一次加 6 分、第二次加 4 分</b>。</p>
+        ${callout('tip', '这是 22 版的重要变化：21 版原文写的是「<b>献血证不加分</b>」，现已改为可加分。')}
 
         <h4 style="margin-top:20px">③ 担任学生干部（最高加 10 分）</h4>
         ${cadreTbl}
-        ${callout('tip', '这一栏是<b>就高不累加</b>：身兼多职按最高职务算。考核等级为「不称职」的一律 0 分。')}
+        ${callout('tip', `22 版原文明确规定：<b>${esc(P.cadreMoral.rule)}</b>考核等级为「不称职」的一律 0 分。`)}
 
         <h4 style="margin-top:20px">④ 争先创优、文明评比等活动中获表彰</h4>
         ${table(['等次', '国家级', '省级', '学院', '学部'], [
@@ -290,11 +291,12 @@
     const b = P.body;
     $('#bodyBody').innerHTML = `
       <div class="card reveal">
-        <h3>基础分（满分 75 分）</h3>
+        <h3>基础分（满分 ${b.base.total} 分）</h3>
         ${table(['项目', '分值'], b.base.items.map(i => [i.t, i.v]))}
+        <p class="muted">22 版第二个子项（审美观与审美情趣）由 25 分降为 <b>20 分</b>，基础分由 75 分降为 <b>70 分</b>。</p>
       </div>
       <div class="card reveal">
-        <h3>奖励分（满分 25 分）</h3>
+        <h3>奖励分（满分 ${b.bonusCap} 分）</h3>
         <h4>① 体育类竞赛</h4>
         ${table(b.sports.head, b.sports.rows)}
         <p class="muted">${esc(b.sports.note)}</p>
@@ -302,6 +304,9 @@
         ${table(b.psych.head, b.psych.rows)}
         <h4 style="margin-top:20px">③ 早点到出勤率</h4>
         ${table(b.attend.head, b.attend.rows)}
+        <h4 style="margin-top:20px">④ ${esc(b.sportsCount.title)}<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(79,209,255,.16);color:var(--cyan);border:1px solid rgba(79,209,255,.35);margin-left:8px;vertical-align:middle">22版新增</span></h4>
+        ${table(b.sportsCount.head, b.sportsCount.rows)}
+        ${callout('warn', esc(b.sportsCount.note))}
       </div>
       <div class="card reveal">
         <h3>扣分项目</h3>
@@ -314,7 +319,7 @@
     // 表 A
     $('#cadreMoralTbl').innerHTML = `
       <thead><tr><th>职务</th><th>考核等级</th><th style="text-align:center">加分</th></tr></thead>
-      <tbody>${P.cadreMoral.map(c => `<tr>
+      <tbody>${P.cadreMoral.rows.map(c => `<tr>
         <td>${esc(c.role)}</td>
         <td class="dim">${esc(c.assess)}</td>
         <td class="num ${c.lv >= 10 ? 'hi' : (c.lv === 0 ? 'zero' : '')}">${c.lv}</td>
@@ -348,7 +353,7 @@
           </tr>
           ${d.roles.map(r => `<tr>
             <td class="role">${esc(r.r)}</td>
-            <td class="v m">${r.moral}<span class="lbl">分</span></td>
+            <td class="v m">${r.moral}<span class="lbl">分</span>${(r.moralGood && r.moralGood !== r.moral) ? `<span class="lbl" style="color:var(--cyan-2)">优秀 ${r.moralGood}</span>` : ''}</td>
             <td class="v c">${r.credit}<span class="lbl">学分</span></td>
             <td class="nt">${esc(r.note || '—')}</td>
           </tr>`).join('')}
@@ -455,6 +460,7 @@
         <h4 style="margin-top:14px">特等奖学金附加条件</h4>
         <ul class="dot">${S.special.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
         ${callout('tip', esc(S.single))}
+        ${S.singleExtra ? callout('tip', esc(S.singleExtra)) : ''}
         ${callout('warn', esc(S.ban))}
       </div>
 
@@ -464,6 +470,8 @@
           H.rows.map(r => [r.n, r.moral, r.academic, r.body, r.extra, r.ratio,
             `<b style="color:var(--gold-2);font-family:var(--mono)">${r.money} 元</b>`]))}
         ${callout('tip', esc(H.cet))}
+        <h4 style="margin-top:16px">集体项目 · 评比比例</h4>
+        <ul class="dot">${H.collective.map(x => `<li><b>${esc(x.n)}</b>：${esc(x.ratio)}</li>`).join('')}</ul>
         <h4 style="margin-top:16px">优秀毕业生 · 基本条件</h4>
         <ul class="dot">${H.graduate.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
         <h4 style="margin-top:12px">优秀毕业生 · 还需满足以下之一</h4>
@@ -562,20 +570,49 @@
       </div>`).join('');
   }
 
+  /* ======================== 22 版更新说明 ======================== */
+  function renderChanges() {
+    $('#changesBody').innerHTML = `
+      <div class="card reveal">
+        <h3>第二十二版 · 相对第二十一版的主要变化</h3>
+        <p class="muted">依据《学生手册（第二十二版）》实物逐页核对整理，页码为 22 版印刷页码。</p>
+        ${table(['条款', '第二十一版', '第二十二版', '说明', '页码'],
+          P.changes.map(c => [c.k,
+            `<span style="color:var(--muted)">${esc(c.o)}</span>`,
+            `<b style="color:var(--cyan-2)">${esc(c.n)}</b>`,
+            esc(c.d), `<span class="dim">${esc(c.p)}</span>`]))}
+        ${callout('tip', esc(P.unchangedNote))}
+        ${callout('warn', '本次照片覆盖手册第 181–203 页（综合素质测评办法、学院奖学金评审管理办法、创先争优评比办法）。<b>第二课堂学分管理办法</b>不在本次照片范围内，该板块仍按第二十一版整理，请以 22 版原书为准。')}
+      </div>
+
+      <div class="card reveal">
+        <h3>测评流程（第九条、第十条）</h3>
+        ${table(['环节', '内容'], P.process.map(p => [`<b>${esc(p.s)}</b>`, esc(p.d)]))}
+        <ul class="dot">
+          <li><b>测评时间</b>：${esc(P.processMeta.time)}</li>
+          <li><b>异议处理</b>：${esc(P.processMeta.dispute)}</li>
+          <li><b>学部细则</b>：${esc(P.processMeta.local)}</li>
+          <li><b>结果用途</b>：${esc(P.processMeta.use)}</li>
+          <li><b>适用范围</b>：${esc(P.processMeta.range)}</li>
+        </ul>
+      </div>`;
+  }
+
   /* ======================== 来源 ======================== */
   function renderSrc() {
     const items = [
+      ['学生手册（第二十二版）· 本站主要数据来源', '实物照片逐页转录核对（第 181–203 页）'],
       ['学生手册（第二十一版·2025）', 'http://www.stcnchu.edu.cn/xxgk/xsglfwxx/content_29143'],
       ['学生手册（第十九版·2023）', 'http://www.stcnchu.edu.cn/xxgk/xsglfwxx/content_23794'],
       ['学生管理服务信息栏目', 'http://www.stcnchu.edu.cn/xxgk/xsglfwxx'],
-      ['学生工作部（处）· 学工文件', 'http://xg.stcnchu.edu.cn/xgwj'],
-      ['教务科研处 · 规章制度', 'http://jw.stcnchu.edu.cn/gzzd'],
-      ['招生信息网 · 专业介绍', 'http://zs.stcnchu.edu.cn/zyjs']
+      ['学生工作部（处）· 学工文件', 'http://xg.stcnchu.edu.cn/xgwj']
     ];
     $('#srcList').innerHTML = items.map(([t, u]) =>
-      `<li>${esc(t)}：<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a></li>`).join('') +
-      `<li>核心条款定位：综合素质测评办法（手册第 182 页起）、第二课堂学分管理办法（第 245 页起）、
-        学生干部考核暂行办法（第 260 页起）、学士学位授予实施细则（第 113 页起）</li>`;
+      u.startsWith('http')
+        ? `<li>${esc(t)}：<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a></li>`
+        : `<li>${esc(t)}：${esc(u)}</li>`).join('') +
+      `<li>核心条款定位（22 版页码）：综合素质测评办法 第 181 页起、学院奖学金评审管理办法 第 194 页起、
+        创先争优评比办法 第 198 页起。</li>`;
   }
 
   /* ==========================================================================
@@ -716,14 +753,14 @@
       <div id="gradeOut" class="muted" style="margin-top:8px"></div>`, true);
 
     // ② 思想道德
-    const cadreOpts = P.cadreMoral.map((c, i) =>
+    const cadreOpts = P.cadreMoral.rows.map((c, i) =>
       `<option value="${c.lv}" ${ST.cadre === c.lv ? 'selected' : ''}>${c.lv} 分 — ${esc(c.role)}（${esc(c.assess)}）</option>`
     ).join('');
 
     const g2 = grp('moral', '思想道德素质 <span class="pct-tag red">15%</span>',
-      `奖励 +${calcMoral().capped} / 30`,
-      '基础分 70 分固定；奖励分封顶 30 分；扣分可累计。',
-      `<div class="nrow"><label>基础分（固定）</label><span class="cv" style="font-family:var(--mono);color:var(--gold-2)">70</span></div>
+      `奖励 +${calcMoral().capped} / ${P.moral.bonusCap}`,
+      `基础分 ${P.moral.base.total} 分固定；奖励分封顶 ${P.moral.bonusCap} 分；扣分可累计。`,
+      `<div class="nrow"><label>基础分（固定）</label><span class="cv" style="font-family:var(--mono);color:var(--gold-2)">${P.moral.base.total}</span></div>
 
       <div class="cgrp-desc" style="margin-top:12px">① 向党组织靠拢（按最高档取一项）</div>
       ${radioItem('party', '未申请', 0, '', ST.party === 0)}
@@ -801,18 +838,25 @@
       ${pickedList('paper', ST.paper)}
 
       <div class="cgrp-desc" style="margin-top:16px">③ 出版著作</div>
-      ${pickTable('book', ['类别', '≥10万字', '<10万字', '≥5万字', '≥1万字', '<1万字'], [
-        ['独（合）著', 20, 12, 12, 8, 5],
-        ['主（参）编', 15, 15, 12, 8, 5]
+      ${pickTable('book', ['类别', '字数档位', '加分'], [
+        ['独（合）著', '≥10万字', 20],
+        ['独（合）著', '<10万字（原文 8~15 分）', 8],
+        ['主（参）编', '≥10万字', 15],
+        ['主（参）编', '<5万字', 12],
+        ['主（参）编', '≥1万字', 8],
+        ['主（参）编', '<1万字', 5]
       ])}
+      <p class="muted">独（合）著「&lt;10万字」档，原表写的是 <b>8~15 分</b>，由学部按作者实际承担的工作量核定；
+        计算器按 <b>8 分</b>保守计入，实际以学部核定为准。</p>
       ${pickedList('book', ST.book)}
 
       <div class="cgrp-desc" style="margin-top:16px">④ 科研成果与科技发明</div>
       ${pickTable('research', ['等级', '国际级', '国家级', '省级', '市厅、校级'], [
         ['一', 40, 30, 20, 15], ['二', 30, 25, 15, 10], ['三', 25, 20, 10, 5],
-        ['优秀', 20, 15, 8, 3], ['鉴定成果（前三名）', 20, 15, 10, 5], ['发明专利', 15, 15, 15, 15]
+        ['优秀', 20, 15, 8, 3], ['鉴定成果（前三名）', 20, 15, 10, 5]
       ])}
       ${pickedList('research', ST.research)}
+      <p class="muted">发明成果（前三名）：获国家发明专利每项加 <b>15 分</b>（不属于上表等级，单独计算）。</p>
 
       <div class="cgrp-desc" style="margin-top:16px">⑤ 发表文学、艺术、新闻作品（本项封顶 20 分）</div>
       ${pickTable('article', ['发表媒体', '≥1500字', '600-1500字', '<600字'], [
@@ -843,8 +887,8 @@
     // ④ 身体心理
     const g4 = grp('body', '身体心理素质 <span class="pct-tag gold">10%</span>',
       `奖励 +${calcBody().bonus} / 25`,
-      '基础分 75 分固定；奖励分封顶 25 分。',
-      `<div class="nrow"><label>基础分（固定）</label><span class="cv" style="font-family:var(--mono);color:var(--gold-2)">75</span></div>
+      `基础分 ${P.body.base.total} 分固定；奖励分封顶 ${P.body.bonusCap} 分。`,
+      `<div class="nrow"><label>基础分（固定）</label><span class="cv" style="font-family:var(--mono);color:var(--gold-2)">${P.body.base.total}</span></div>
 
       <div class="cgrp-desc" style="margin-top:12px">① 体育类竞赛（点击加分）</div>
       ${pickTable('sports', b.sports.head, b.sports.rows)}
@@ -1012,15 +1056,15 @@
       </div>`).join('');
 
     const notes = [];
-    if (r.m.bonus > P.moral.bonusCap) notes.push('思想道德奖励分已封顶 30 分');
+    if (r.m.bonus > P.moral.bonusCap) notes.push(`思想道德奖励分已封顶 ${P.moral.bonusCap} 分`);
     if (r.p.bonusRaw > P.practice.bonusCap) notes.push('实践创新奖励分已封顶 60 分');
-    if (r.b.bonusRaw > P.body.bonusCap) notes.push('身体心理奖励分已封顶 25 分');
+    if (r.b.bonusRaw > P.body.bonusCap) notes.push(`身体心理奖励分已封顶 ${P.body.bonusCap} 分`);
     notes.push(`思想道德 ${num(r.m.v)}／专业文化 ${num(r.a.v)}／实践创新 ${num(r.p.v)}／身体心理 ${num(r.b.v)}`);
     $('#scoreNote').innerHTML = notes.join('；');
 
     // 同步分组徽标
     const bm = $('[data-g="moral"] .badge');
-    if (bm) bm.textContent = `奖励 +${r.m.capped} / 30`;
+    if (bm) bm.textContent = `奖励 +${r.m.capped} / ${P.moral.bonusCap}`;
     const bp = $('[data-g="practice"] .badge');
     if (bp) bp.textContent = `奖励 +${r.p.bonus} / 60`;
     const bb = $('[data-g="body"] .badge');
@@ -1238,6 +1282,7 @@
     renderPits();
     renderPlan();
     renderSrc();
+    renderChanges();
 
     // 重置按钮
     $('#calcReset').onclick = () => {
